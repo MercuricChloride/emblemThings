@@ -9,42 +9,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  const loogies = await deploy("Loogies", {
+  const SVGBadge = await deploy("SVGBadge", {
     from: deployer,
     log: true,
   });
-
-  const bow = await deploy("Bow", {
-    from: deployer,
-    log: true,
-  });
-
-  const eyelash = await deploy("Eyelash", {
-    from: deployer,
-    log: true,
-  });
-
-  const mustache = await deploy("Mustache", {
-    from: deployer,
-    log: true,
-  });
-
-  const contactLenses = await deploy("ContactLenses", {
-    from: deployer,
-    log: true,
-  });
-
-  await deploy("FancyLoogie", {
-    from: deployer,
-    args: [loogies.address],
-    log: true,
-  });
-
-  const FancyLoogie = await ethers.getContract("FancyLoogie", deployer);
-  await FancyLoogie.addNft(bow.address);
-  await FancyLoogie.addNft(mustache.address);
-  await FancyLoogie.addNft(contactLenses.address);
-  await FancyLoogie.addNft(eyelash.address);
 
   /*
     To take ownership of yourContract using the ownable library uncomment next line and add the 
