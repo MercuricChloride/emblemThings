@@ -5,26 +5,26 @@ import { Address } from "../components";
 import { ethers } from "ethers";
 import { useContractReader } from "eth-hooks";
 
-function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG }) {
+function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG, tx, writeContracts}) {
   const [allLoogies, setAllLoogies] = useState();
   const [page, setPage] = useState(1);
   const [loadingLoogies, setLoadingLoogies] = useState(true);
   const perPage = 8;
 
-  const totalSupply = useContractReader(readContracts, "FancyLoogie", "totalSupply");
+  const totalSupply = useContractReader(readContracts, "SVGBadge", "totalSupply");
 
   useEffect(() => {
     const updateAllLoogies = async () => {
-      if (readContracts.FancyLoogie && totalSupply) {
+      if (readContracts.SVGBadge && totalSupply) {
         setLoadingLoogies(true);
         const collectibleUpdate = [];
         let startIndex = totalSupply - 1 - perPage * (page - 1);
         for (let tokenIndex = startIndex; tokenIndex > startIndex - perPage && tokenIndex >= 0; tokenIndex--) {
           try {
             if (DEBUG) console.log("Getting token index", tokenIndex);
-            const tokenId = await readContracts.FancyLoogie.tokenByIndex(tokenIndex);
+            const tokenId = await readContracts.SVGBadge.tokenByIndex(tokenIndex);
             if (DEBUG) console.log("Getting FancyLoogie tokenId: ", tokenId);
-            const tokenURI = await readContracts.FancyLoogie.tokenURI(tokenId);
+            const tokenURI = await readContracts.SVGBadge.tokenURI(tokenId);
             if (DEBUG) console.log("tokenURI: ", tokenURI);
             const jsonManifestString = atob(tokenURI.substring(29));
 
@@ -49,12 +49,18 @@ function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG }) 
     <>
       <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
         <div style={{ fontSize: 16 }}>
-          <p>
-            FancyLoogies are upgraded <strong>Optimistic Loogies</strong> with <strong>NFTs accesories</strong>.
-          </p>
-          <p>
-            Upgrate <Link to="/yourLoogies">Your Optimistic Loogies</Link>!
-          </p>
+        <Button
+          type="primary"
+          onClick={async () => {
+            try {
+              tx(writeContracts.SVGBadge.mintItem());
+            } catch (e) {
+              console.log("mint failed", e);
+            }
+          }}
+        >
+          MINT
+        </Button>
         </div>
       </div>
 
@@ -96,7 +102,7 @@ function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG }) 
                         </div>
                       }
                     >
-                      <img src={item.image} alt={"Loogie #" + id} width="200" />
+                      <img src={item.image} alt={"Badge #" + id} width="200" />
                       <div>{item.description}</div>
                       <div>
                         <Address

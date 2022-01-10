@@ -308,17 +308,8 @@ function App(props) {
         <Menu.Item key="/">
           <Link to="/">Home</Link>
         </Menu.Item>
-        <Menu.Item key="/yourLoogies">
-          <Link to="/yourLoogies">Your Optimistic Loogies</Link>
-        </Menu.Item>
-        <Menu.Item key="/yourFancyLoogies">
-          <Link to="/yourFancyLoogies">Your Fancy Loogies</Link>
-        </Menu.Item>
         <Menu.Item key="/yourAccesories">
-          <Link to="/yourAccesories">Your Accesories</Link>
-        </Menu.Item>
-        <Menu.Item key="/howto">
-          <Link to="/howto">How To Use Optimistic Network</Link>
+          <Link to="/yourAccesories">Track Progress</Link>
         </Menu.Item>
       </Menu>
 
@@ -326,44 +317,11 @@ function App(props) {
         <Route exact path="/">
           <FancyLoogies
             readContracts={readContracts}
-            mainnetProvider={mainnetProvider}
-            blockExplorer={blockExplorer}
-            DEBUG={DEBUG}
-          />
-        </Route>
-        <Route exact path="/yourLoogies">
-          <YourLoogies
-            DEBUG={DEBUG}
-            readContracts={readContracts}
             writeContracts={writeContracts}
-            tx={tx}
             mainnetProvider={mainnetProvider}
             blockExplorer={blockExplorer}
-            address={address}
-            updateBalances={updateBalances}
-            setUpdateBalances={setUpdateBalances}
-          />
-        </Route>
-        <Route exact path="/yourFancyLoogies">
-          <YourFancyLoogies
             DEBUG={DEBUG}
-            readContracts={readContracts}
-            writeContracts={writeContracts}
             tx={tx}
-            mainnetProvider={mainnetProvider}
-            blockExplorer={blockExplorer}
-            address={address}
-            updateBalances={updateBalances}
-            setUpdateBalances={setUpdateBalances}
-            fancyLoogieContracts={fancyLoogieContracts}
-            fancyLoogiesNfts={fancyLoogiesNfts}
-            setFancyLoogiesNfts={setFancyLoogiesNfts}
-            selectedFancyLoogie={selectedFancyLoogie}
-            setSelectedFancyLoogie={setSelectedFancyLoogie}
-            selectedNfts={selectedNfts}
-            setSelectedFancyLoogiePreview={setSelectedFancyLoogiePreview}
-            nfts={nfts}
-            setSelectedNfts={setSelectedNfts}
           />
         </Route>
         <Route exact path="/yourAccesories">
@@ -461,11 +419,8 @@ function App(props) {
           </div>
         </Route>
         <Route exact path="/debug">
-          <div style={{ padding: 32 }}>
-            <Address value={readContracts && readContracts.FancyLoogie && readContracts.FancyLoogie.address} />
-          </div>
           <Contract
-            name="FancyLoogie"
+            name="SVGBadge"
             price={price}
             signer={userSigner}
             provider={localProvider}

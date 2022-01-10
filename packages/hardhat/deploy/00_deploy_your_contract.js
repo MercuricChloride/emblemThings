@@ -11,6 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const SVGBadge = await deploy("SVGBadge", {
     from: deployer,
+    args: [69],
     log: true,
   });
 
