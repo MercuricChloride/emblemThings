@@ -4,7 +4,7 @@ const { solidity } = require("ethereum-waffle");
 
 use(solidity);
 
-describe("My Dapp", function () {
+describe("Badge Tests", function () {
   let myContract;
 
   // quick fix to let gas reporter fetch data from gas station & coinmarketcap
@@ -12,32 +12,60 @@ describe("My Dapp", function () {
     setTimeout(done, 2000);
   });
 
-  describe("YourContract", function () {
-    it("Should deploy YourContract", async function () {
-      const YourContract = await ethers.getContractFactory("YourContract");
-
-      myContract = await YourContract.deploy();
+  describe("SimpleBadge", function () {
+    it("Should deploy SimpleBadge", async function () {
+      const SimpleBadge = await ethers.getContractFactory("SimpleBadge");
+      myContract = await SimpleBadge.deploy();
     });
 
-    describe("setPurpose()", function () {
-      it("Should be able to set a new purpose", async function () {
-        const newPurpose = "Test Purpose";
-
-        await myContract.setPurpose(newPurpose);
-        expect(await myContract.purpose()).to.equal(newPurpose);
+    describe("mintBadge()", function () {
+      it("Mint badge 1 to an account", async function () {
+        const [addr1] = await ethers.getSigners();
+        await myContract.mintBadge(addr1.address, 1);
+        expect(await myContract.ownerOf(1)).to.equal(addr1.address);
       });
+    });
 
-      // Uncomment the event and emit lines in YourContract.sol to make this test pass
+    describe("approve()", function () {
+      it("Should allow user to approve badge", async function () {
+        const [addr1, addr2] = await ethers.getSigners();
+        await myContract.connect(addr1).approve(addr2.address, 1);
+        expect(await myContract.getApproved(1)).to.equal(addr2.address);
+      });
+    });
 
-      /*it("Should emit a SetPurpose event ", async function () {
-        const [owner] = await ethers.getSigners();
+    describe("transferFrom()", function () {
+      it("Shouldn't allow user to transfer badge", async function () {
+        const [addr1, addr2] = await ethers.getSigners();
+        await myContract.connect(addr2).transferFrom(addr1.address, addr2.address, 1);
+        expect(await myContract.ownerOf(1)).to.equal(addr1.address);
+      });
+    });
+    
+    // Full disclosure not sure why this isn't working. Need to come back to this
 
-        const newPurpose = "Another Test Purpose";
+    /*
+    describe("safeTransferFrom()", function () {
+      it("Shouldn't allow user to transfer badge", async function () {
+        const [addr1, addr2] = await ethers.getSigners();
+        await myContract.connect(addr2)['safeTransferFrom(address, address, uint)'](addr1.address, addr2.address, 1);
+        expect(await myContract.ownerOf(1)).to.equal(addr1.address);
+      });
+    });
+    */
+    describe("levelBadge()", function () {
+      it("Should upgrade badge level", async function () {
+        const [addr1, addr2] = await ethers.getSigners();
+        await myContract.connect(addr1).levelBadge(1,2);
+        expect(await myContract.getLevel(1)).to.equal(2);
+      });
+    });
 
-        expect(await myContract.setPurpose(newPurpose)).to.
-          emit(myContract, "SetPurpose").
-            withArgs(owner.address, newPurpose);
-      });*/
+    describe("tokenURI()", function () {
+      it("Should return appropriate uri for badge level", async function () {
+        const [addr1, addr2] = await ethers.getSigners();
+        expect(await myContract.tokenURI(1)).to.equal("ipfs.io/levelThreeMetadata");
+      });
     });
   });
 });

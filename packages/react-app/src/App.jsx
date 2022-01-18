@@ -420,7 +420,7 @@ function App(props) {
         </Route>
         <Route exact path="/debug">
           <Contract
-            name="SVGBadge"
+            name="SimpleBadge"
             price={price}
             signer={userSigner}
             provider={localProvider}

@@ -9,11 +9,19 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
+  const simpleBadge = await deploy("SimpleBadge", {
+    from: deployer,
+    //args: [],
+    log: true,
+  });
+
+  /*
   const SVGBadge = await deploy("SVGBadge", {
     from: deployer,
     args: [69],
     log: true,
   });
+  */
 
   /*
     To take ownership of yourContract using the ownable library uncomment next line and add the 
