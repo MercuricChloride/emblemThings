@@ -2,8 +2,9 @@ pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SimpleBadge is ERC721 {
+contract SimpleBadge is ERC721, Ownable{
 
   // @dev init ERC721 name and symbol 
   constructor() ERC721("SimpleBadge", "BADGE") {
@@ -58,11 +59,11 @@ contract SimpleBadge is ERC721 {
     return string(abi.encodePacked(baseURI,_tokenURI));
   }
 
-  function mintBadge(address to, uint tokenId) public {
+  function mintBadge(address to, uint tokenId) public onlyOwner {
     _safeMint(to, tokenId);
   }
 
-  function levelBadge(uint tokenId, uint level) public {
+  function levelBadge(uint tokenId, uint level) public onlyOwner {
     levels[tokenId] = level;
   }
 }

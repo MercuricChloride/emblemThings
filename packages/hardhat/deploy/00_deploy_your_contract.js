@@ -9,11 +9,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  const simpleBadge = await deploy("SimpleBadge", {
+  await deploy("SimpleBadge", {
     from: deployer,
     //args: [],
     log: true,
   });
+
+  const SimpleBadge = await ethers.getContract("SimpleBadge", deployer);
+
+  await SimpleBadge.transferOwnership("0xC9FFEe9e34723d882CB97a6c056100661d00Bfe1");
 
   /*
   const SVGBadge = await deploy("SVGBadge", {

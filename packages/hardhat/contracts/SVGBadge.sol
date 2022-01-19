@@ -7,19 +7,27 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "base64-sol/base64.sol";
 import "./HexStrings.sol";
-import "hardhat/console.sol";
+import "./SimpleBadge.sol";
 
 contract SVGBadge is ERC721Enumerable, Ownable {
     using Strings for uint256;
-    using Strings for uint8;
     using HexStrings for uint160;
     using Counters for Counters.Counter;
-    uint256 whatever;
+
+    SimpleBadge badge1;
+    SimpleBadge badge2;
+    SimpleBadge badge3;
+    SimpleBadge badge4;
+    SimpleBadge badge5;
 
     Counters.Counter private _tokenIds;
 
-    constructor(uint256 _whatever) ERC721("SVG_Badge", "SBadge") {
-        whatever = _whatever;
+    constructor(SimpleBadge _badge1, SimpleBadge _badge2, SimpleBadge _badge3, SimpleBadge _badge4, SimpleBadge _badge5) ERC721("SVG_Badge", "SBadge") { 
+        badge1 = _badge1;
+        badge2 = _badge2;
+        badge3 = _badge3;
+        badge4 = _badge4;
+        badge5 = _badge5;
     }
 
     function mintItem() public returns (uint256) {
@@ -49,7 +57,7 @@ contract SVGBadge is ERC721Enumerable, Ownable {
                                 name,
                                 '", "description":"',
                                 description,
-                                '", "external_url":"https://burnyboys.com/token/',
+                                '", "external_url":"https://emblemdao.com',
                                 id.toString(),
                                 '", "owner":"',
                                 (uint160(ownerOf(id))).toHexString(20),
@@ -71,24 +79,6 @@ contract SVGBadge is ERC721Enumerable, Ownable {
     {
         string memory svg = string(
             abi.encodePacked(
-                '<style type="text/css">',
-                "<![CDATA[",
-                ".con {",
-                "stroke-width: 3;",
-                "stroke: #BFBFBF;",
-                "}",
-                ".node {",
-                "stroke-width: 4;",
-                "stroke: #BFBFBF;",
-                "fill: black !important;",
-                "}",
-                ".inner {",
-                "stroke-width: 6;",
-                "stroke: #808080;",
-                "}",
-                '${classes.join("\n")}',
-                "]]>",
-                "</style>",
                 '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">',
                 renderTokenById(id),
                 "</svg>"
