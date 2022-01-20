@@ -17,8 +17,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const SimpleBadge = await ethers.getContract("SimpleBadge", deployer);
 
-  await SimpleBadge.transferOwnership("0xC9FFEe9e34723d882CB97a6c056100661d00Bfe1");
+  await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 1);
+  await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 2);
+  await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 3);
+  await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 4);
 
+  await SimpleBadge.levelBadge(1, 0);
+  await SimpleBadge.levelBadge(2, 1);
+  await SimpleBadge.levelBadge(3, 2);
+  await SimpleBadge.levelBadge(4, 3);
   /*
   const SVGBadge = await deploy("SVGBadge", {
     from: deployer,

@@ -43,23 +43,22 @@ contract SimpleBadge is ERC721, Ownable{
   // @dev checks levels mapping at tokenId to get the token level and returns different metadata depending on level
   // @param tokenId, tokenId to return metadata for
   function tokenURI(uint tokenId) public view override returns(string memory) {
-    string memory baseURI = "ipfs.io/";
+    string memory baseURI = "https://bonez.mypinata.cloud/ipfs/Qmc6urNzFH1osFpXPh2Gv4oMNCDHAb3gS6dL6xhZyoZ9vd/";
     string memory _tokenURI;
     if(levels[tokenId] == 0){
-      _tokenURI = "levelOneMetadata";
+      _tokenURI = "Level1.json";
     } else if(levels[tokenId] == 1){
-      _tokenURI = "levelTwoMetadata";
+      _tokenURI = "Level2.json";
     } else if(levels[tokenId] == 2){
-      _tokenURI = "levelThreeMetadata";
-    } else if(levels[tokenId] == 3){
-      _tokenURI = "levelFourMetadata";
+      _tokenURI = "Level3.json";
     } else {
-      _tokenURI = "levelFiveMetadata";
+      _tokenURI = "Level4.json";
     }
     return string(abi.encodePacked(baseURI,_tokenURI));
   }
 
   function mintBadge(address to, uint tokenId) public onlyOwner {
+    require(balanceOf(to) == 0, "badge already minted for this user");
     _safeMint(to, tokenId);
   }
 

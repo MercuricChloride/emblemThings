@@ -43,6 +43,11 @@ describe("Badge Tests", function () {
         await myContract.mintBadge(addr1.address, 1);
         expect(await myContract.ownerOf(1)).to.equal(addr1.address);
       });
+      it("Can only mint one badge to an account", async function () {
+        const [addr1] = await ethers.getSigners();
+        //await myContract.mintBadge(addr1.address, 2);
+        await expect(myContract.mintBadge(addr1.address, 2)).to.be.revertedWith("badge already minted for this user");
+      });
       it("Only allow owner to mint", async function () {
         const [addr1, addr2] = await ethers.getSigners();
         //await myContract.connect(addr2).mintBadge(addr2.address, 2);
@@ -65,7 +70,7 @@ describe("Badge Tests", function () {
         expect(await myContract.ownerOf(1)).to.equal(addr1.address);
       });
     });
-    
+
     // Full disclosure not sure why this isn't working. Need to come back to this
 
     /*
@@ -80,7 +85,7 @@ describe("Badge Tests", function () {
     describe("levelBadge()", function () {
       it("Owner can upgrade badge level", async function () {
         const [addr1, addr2] = await ethers.getSigners();
-        await myContract.connect(addr1).levelBadge(1,2);
+        await myContract.connect(addr1).levelBadge(1, 2);
         expect(await myContract.getLevel(1)).to.equal(2);
       });
       it("Only allow owner to upgrade", async function () {
@@ -89,12 +94,13 @@ describe("Badge Tests", function () {
       });
     });
 
+    /*
     describe("tokenURI()", function () {
       it("Should return appropriate uri for badge level", async function () {
-        const [addr1, addr2] = await ethers.getSigners();
         expect(await myContract.tokenURI(1)).to.equal("ipfs.io/levelThreeMetadata");
       });
     });
+    */
 
   });
 
@@ -141,7 +147,7 @@ describe("Badge Tests", function () {
         expect(await myContract.ownerOf(1)).to.equal(addr1.address);
       });
     });
-    
+
     // Full disclosure not sure why this isn't working. Need to come back to this
 
     /*
