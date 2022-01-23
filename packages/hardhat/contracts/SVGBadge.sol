@@ -30,10 +30,11 @@ contract SVGBadge is ERC721Enumerable, Ownable {
         badge5 = _badge5;
     }
 
-    function mintItem() public returns (uint256) {
+    function mintItem(address to) public onlyOwner returns (uint256) {
+        require(balanceOf(to) <1, 'Token already minted for this address');
         _tokenIds.increment();
         uint256 id = _tokenIds.current();
-        _mint(msg.sender, id);
+        _mint(to, id);
 
         return id;
     }
@@ -98,4 +99,23 @@ contract SVGBadge is ERC721Enumerable, Ownable {
         );
         return render;
     }
+
+    // @dev overrides the transferFrom function to remove the ability to transfer this token
+    // @param from, not used, and only to conform to the ERC721 standard
+    // @param to, not used, and only to conform to the ERC721 standard
+    // @param tokenId, not used, and only to conform to the ERC721 standard
+    function transferFrom(address from, address to, uint tokenId) public override{}
+
+    // @dev overrides the safeTransferFrom function to remove the ability to transfer this token
+    // @param from, not used, and only to conform to the ERC721 standard
+    // @param to, not used, and only to conform to the ERC721 standard
+    // @param tokenId, not used, and only to conform to the ERC721 standard
+    // @param _data, not used, and only to conform to the ERC721 standard
+    function safeTransferFrom(address from, address to, uint tokenId, bytes memory _data) public override{}
+
+    // @dev overrides the safeTransferFrom function to remove the ability to transfer this token
+    // @param from, not used, and only to conform to the ERC721 standard
+    // @param to, not used, and only to conform to the ERC721 standard
+    // @param tokenId, not used, and only to conform to the ERC721 standard
+    function safeTransferFrom(address from, address to, uint tokenId) public override{}
 }

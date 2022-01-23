@@ -30,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { YourLoogies, YourFancyLoogies, YourAccesories, FancyLoogiePreview, FancyLoogies } from "./views";
+import { SVGView, YourLoogies, YourFancyLoogies, YourAccesories, FancyLoogiePreview, FancyLoogies } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 const { TabPane } = Tabs;
 
@@ -324,6 +324,9 @@ function App(props) {
             tx={tx}
           />
         </Route>
+        <Route path="/svgview">
+          <SVGView />
+        </Route>
         <Route exact path="/yourAccesories">
           <FancyLoogiePreview
             DEBUG={DEBUG}
@@ -431,7 +434,6 @@ function App(props) {
         </Route>
       </Switch>
 
-      <Footer />
 
       <ThemeSwitch />
 

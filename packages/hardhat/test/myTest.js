@@ -113,38 +113,36 @@ describe("Badge Tests", function () {
     describe("transferOwnership", function () {
       it("Should transfer ownership", async function () {
         const [addr1] = await ethers.getSigners();
-        await myContract.transferOwnership(addr1.address);
-        expect(await myContract.owner()).to.equal(addr1.address);
+        await svgContract.transferOwnership(addr1.address);
+        expect(await svgContract.owner()).to.equal(addr1.address);
       })
     });
 
-    /*
     describe("mintBadge()", function () {
       it("Mint badge 1 to an account", async function () {
         const [addr1] = await ethers.getSigners();
-        await myContract.mintBadge(addr1.address, 1);
-        expect(await myContract.ownerOf(1)).to.equal(addr1.address);
+        await svgContract.mintItem(addr1.address);
+        expect(await svgContract.ownerOf(1)).to.equal(addr1.address);
       });
       it("Only allow owner to mint", async function () {
         const [addr1, addr2] = await ethers.getSigners();
-        //await myContract.connect(addr2).mintBadge(addr2.address, 2);
-        await expect(myContract.connect(addr2).mintBadge(addr2.address, 2)).to.be.revertedWith("Ownable: caller is not the owner");
+        await expect(svgContract.connect(addr2).mintItem(addr2.address)).to.be.revertedWith("Ownable: caller is not the owner");
       });
     });
 
     describe("approve()", function () {
       it("Should allow user to approve badge", async function () {
         const [addr1, addr2] = await ethers.getSigners();
-        await myContract.connect(addr1).approve(addr2.address, 1);
-        expect(await myContract.getApproved(1)).to.equal(addr2.address);
+        await svgContract.connect(addr1).approve(addr2.address, 1);
+        expect(await svgContract.getApproved(1)).to.equal(addr2.address);
       });
     });
 
     describe("transferFrom()", function () {
       it("Shouldn't allow user to transfer badge", async function () {
         const [addr1, addr2] = await ethers.getSigners();
-        await myContract.connect(addr2).transferFrom(addr1.address, addr2.address, 1);
-        expect(await myContract.ownerOf(1)).to.equal(addr1.address);
+        await svgContract.connect(addr2).transferFrom(addr1.address, addr2.address, 1);
+        expect(await svgContract.ownerOf(1)).to.equal(addr1.address);
       });
     });
 
