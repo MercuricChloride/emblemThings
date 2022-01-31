@@ -94,7 +94,7 @@ contract SVGBadge is ERC721Enumerable, Ownable {
         string memory render;
         render = string(
             abi.encodePacked(
-                '<g id="inner"><circle class="inner" cx="0" cy="0" r="34" /><circle class="inner" cx="0" cy="0" r="26" /></g>`'
+                '<g id="inner"><circle class="inner" cx="34" cy="34" r="34" /><circle class="inner" cx="374" cy="374" r="26" /></g>`'
             )
         );
         return render;

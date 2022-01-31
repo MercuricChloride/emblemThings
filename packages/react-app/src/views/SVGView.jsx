@@ -6,9 +6,9 @@ import { Address, AddressInput } from "../components";
 import { ethers } from "ethers";
 
 function SVGView({
-  /*
-  DEBUG,
   readContracts,
+ /*
+  DEBUG,
   writeContracts,
   tx,
   address,
@@ -48,8 +48,6 @@ function SVGView({
     updatePreview();
   }, [address, selectedFancyLoogie, selectedNfts, updateBalances]);
   */
-
-  const sampleSVG = <g id="inner"><circle class="inner" cx="200" cy="200" r="34" /><circle class="inner" cx="250" cy="250" r="26" /></g>;
 
   return (
         <div>

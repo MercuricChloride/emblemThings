@@ -9,14 +9,34 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("SimpleBadge", {
+  const myContract = await deploy("SimpleBadge", {
     from: deployer,
     //args: [],
     log: true,
   });
 
-  const SimpleBadge = await ethers.getContract("SimpleBadge", deployer);
+  const myContract2 = await deploy("SimpleBadge", {
+    from: deployer,
+    //args: [],
+    log: true,
+  });
+  const myContract3 = await deploy("SimpleBadge", {
+    from: deployer,
+    //args: [],
+    log: true,
+  });
+  const myContract4 = await deploy("SimpleBadge", {
+    from: deployer,
+    //args: [],
+    log: true,
+  });
+  const myContract5 = await deploy("SimpleBadge", {
+    from: deployer,
+    //args: [],
+    log: true,
+  });
 
+  /*
   await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 1);
   await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 2);
   await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 3);
@@ -26,13 +46,13 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   await SimpleBadge.levelBadge(2, 1);
   await SimpleBadge.levelBadge(3, 2);
   await SimpleBadge.levelBadge(4, 3);
-  /*
+  */
+
   const SVGBadge = await deploy("SVGBadge", {
     from: deployer,
-    args: [69],
+    args: [myContract.address, myContract2.address, myContract3.address,myContract4.address,myContract5.address,],
     log: true,
   });
-  */
 
   /*
     To take ownership of yourContract using the ownable library uncomment next line and add the 
