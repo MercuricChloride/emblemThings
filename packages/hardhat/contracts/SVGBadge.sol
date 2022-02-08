@@ -30,7 +30,19 @@ contract SVGBadge is ERC721Enumerable, Ownable {
         badge5 = _badge5;
     }
 
+    /*
     function mintItem(address to) public onlyOwner returns (uint256) {
+        require(balanceOf(to) <1, 'Token already minted for this address');
+        _tokenIds.increment();
+        uint256 id = _tokenIds.current();
+        _mint(to, id);
+
+        return id;
+    }
+    */
+
+    // THIS FUNCTION IS JUST BEING USED FOR TESTING WITHOUT USING THE OWNER NONSENSE
+    function mintItem(address to) public returns (uint256) {
         require(balanceOf(to) <1, 'Token already minted for this address');
         _tokenIds.increment();
         uint256 id = _tokenIds.current();
@@ -82,7 +94,7 @@ contract SVGBadge is ERC721Enumerable, Ownable {
             abi.encodePacked(
                 '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">',
                 renderTokenById(id),
-                "</svg>"
+                '</svg>'
             )
         );
 
@@ -92,9 +104,13 @@ contract SVGBadge is ERC721Enumerable, Ownable {
     // Visibility is `public` to enable it being called by other contracts for composition.
     function renderTokenById(uint256 id) public view returns (string memory) {
         string memory render;
+        string memory cx1 = "34";
+        string memory cx2 = "374";
+        string memory cy1 = "34";
+        string memory cy2 = "374";
         render = string(
             abi.encodePacked(
-                '<g id="inner"><circle class="inner" cx="34" cy="34" r="34" /><circle class="inner" cx="374" cy="374" r="26" /></g>`'
+                '<g id="inner"><circle class="inner" cx="',cx1,'" cy="',cy1,'" r="34" /><circle class="inner" cx="',cx2,'" cy="',cy2,'" r="26" /></g>'
             )
         );
         return render;

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Alert, Button, Card, Col, Input, List, Menu, Row, Tabs, Dropdown, Badge } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, ReadOutlined } from "@ant-design/icons";
 import { Address, AddressInput } from "../components";
 import { ethers } from "ethers";
+import { useContractReader } from "eth-hooks";
 
 function SVGView({
   readContracts,
- /*
   DEBUG,
   writeContracts,
   tx,
@@ -23,7 +23,6 @@ function SVGView({
   selectedNfts,
   setSelectedNfts,
   setFancyLoogiesNfts,
-  */
 }) {
   /*
   useEffect(() => {
@@ -51,9 +50,7 @@ function SVGView({
 
   return (
         <div>
-          <svg width="800" height="800" xmlns="http://www.w3.org/2000/svg">
-          {sampleSVG}
-          </svg>
+          {/* <img src={parsedSVG.image} alt="" /> */}
         </div>
   );
 }

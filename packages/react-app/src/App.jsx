@@ -30,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { SVGView, YourLoogies, YourFancyLoogies, YourAccesories, FancyLoogiePreview, FancyLoogies } from "./views";
+import { Merkler, SVGView, YourLoogies, YourFancyLoogies, YourAccesories, FancyLoogiePreview, FancyLoogies } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 const { TabPane } = Tabs;
 
@@ -311,6 +311,9 @@ function App(props) {
         <Menu.Item key="/yourAccesories">
           <Link to="/yourAccesories">Track Progress</Link>
         </Menu.Item>
+        <Menu.Item key="/svgview">
+          <Link to="/svgview">SVG View</Link>
+        </Menu.Item>
       </Menu>
 
       <Switch>
@@ -322,11 +325,37 @@ function App(props) {
             blockExplorer={blockExplorer}
             DEBUG={DEBUG}
             tx={tx}
+            signer={userSigner}
+            address={address}
           />
         </Route>
         <Route path="/svgview">
           <SVGView
+            DEBUG={DEBUG}
             readContracts={readContracts}
+            writeContracts={writeContracts}
+            tx={tx}
+            address={address}
+            updateBalances={updateBalances}
+            setUpdateBalances={setUpdateBalances}
+            nfts={nfts}
+            nftsSvg={nftsSvg}
+            fancyLoogiesNfts={fancyLoogiesNfts}
+            selectedFancyLoogie={selectedFancyLoogie}
+            selectedFancyLoogiePreview={selectedFancyLoogiePreview}
+            setSelectedFancyLoogiePreview={setSelectedFancyLoogiePreview}
+            selectedNfts={selectedNfts}
+            setSelectedNfts={setSelectedNfts}
+            setFancyLoogiesNfts={setFancyLoogiesNfts}
+          />
+        </Route>
+        <Route path="/merkler">
+          <Merkler
+            DEBUG={DEBUG}
+            readContracts={readContracts}
+            writeContracts={writeContracts}
+            tx={tx}
+            address={address}
           />
         </Route>
         <Route exact path="/yourAccesories">
@@ -426,6 +455,15 @@ function App(props) {
         <Route exact path="/debug">
           <Contract
             name="SimpleBadge"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+          <Contract
+            name="SVGBadge"
             price={price}
             signer={userSigner}
             provider={localProvider}

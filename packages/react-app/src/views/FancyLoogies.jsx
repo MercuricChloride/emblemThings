@@ -5,7 +5,7 @@ import { Address } from "../components";
 import { ethers } from "ethers";
 import { useContractReader } from "eth-hooks";
 
-function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG, tx, writeContracts}) {
+function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG, tx, writeContracts, signer, address}) {
   const [allLoogies, setAllLoogies] = useState();
   const [page, setPage] = useState(1);
   const [loadingLoogies, setLoadingLoogies] = useState(true);
@@ -53,7 +53,9 @@ function FancyLoogies({ readContracts, mainnetProvider, blockExplorer, DEBUG, tx
           type="primary"
           onClick={async () => {
             try {
-              tx(writeContracts.SVGBadge.mintItem());
+              const signatureHash = await signer.signMessage("Requesting SVG BADGE mint");
+              console.log(signatureHash);
+              tx(writeContracts.SVGBadge.mintItem(address));
             } catch (e) {
               console.log("mint failed", e);
             }
