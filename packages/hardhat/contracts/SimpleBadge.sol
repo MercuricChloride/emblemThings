@@ -3,12 +3,19 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+
 
 contract SimpleBadge is ERC721, Ownable{
 
   // @dev init ERC721 name and symbol 
-  constructor() ERC721("SimpleBadge", "BADGE") {
+  constructor(bytes32 _root) ERC721("SimpleBadge", "BADGE") {
+    root = _root;
   }
+
+  bytes32 public root;
+
+  uint public currentTokenId  = 0; 
 
   // @dev mapping from tokenId to a level
   mapping (uint => uint) public levels;
@@ -57,9 +64,16 @@ contract SimpleBadge is ERC721, Ownable{
     return string(abi.encodePacked(baseURI,_tokenURI));
   }
 
-  function mintBadge(address to, uint tokenId) public onlyOwner {
-    require(balanceOf(to) == 0, "badge already minted for this user");
-    _safeMint(to, tokenId);
+  function updateMerkleRoot(bytes32 _root) public onlyOwner {
+    root = _root;
+  }
+
+  function merkleMint(bytes32[] memory proof, address account) public returns(bool) {
+    require(MerkleProof.verify(proof, root, bytes32(keccak256(abi.encodePacked(account)))), 'Not elligible for mint');
+    require(balanceOf(account) < 1, 'user already minted');
+    _safeMint(account, currentTokenId);
+    currentTokenId++;
+    return true;
   }
 
   function levelBadge(uint tokenId, uint level) public onlyOwner {

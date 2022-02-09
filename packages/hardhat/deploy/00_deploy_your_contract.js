@@ -9,32 +9,35 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  const myContract = await deploy("SimpleBadge", {
+  const SimpleBadge = await deploy("SimpleBadge", {
     from: deployer,
-    //args: [],
+    args: ["0x042e5e696b8e6c15d4cc58c983437977f54d6e44645d7eef34e74716021dddd4"],
     log: true,
   });
 
-  const myContract2 = await deploy("SimpleBadge", {
-    from: deployer,
-    //args: [],
-    log: true,
-  });
-  const myContract3 = await deploy("SimpleBadge", {
-    from: deployer,
-    //args: [],
-    log: true,
-  });
-  const myContract4 = await deploy("SimpleBadge", {
-    from: deployer,
-    //args: [],
-    log: true,
-  });
-  const myContract5 = await deploy("SimpleBadge", {
-    from: deployer,
-    //args: [],
-    log: true,
-  });
+  const myContract = await ethers.getContractAt('SimpleBadge', SimpleBadge.address);
+  await myContract.transferOwnership("0x807a1752402D21400D555e1CD7f175566088b955");
+
+  // const myContract2 = await deploy("SimpleBadge", {
+  //   from: deployer,
+  //   args: ["0x042e5e696b8e6c15d4cc58c983437977f54d6e44645d7eef34e74716021dddd4"],
+  //   log: true,
+  // });
+  // const myContract3 = await deploy("SimpleBadge", {
+  //   from: deployer,
+  //   args: ["0x042e5e696b8e6c15d4cc58c983437977f54d6e44645d7eef34e74716021dddd4"],
+  //   log: true,
+  // });
+  // const myContract4 = await deploy("SimpleBadge", {
+  //   from: deployer,
+  //   args: ["0x042e5e696b8e6c15d4cc58c983437977f54d6e44645d7eef34e74716021dddd4"],
+  //   log: true,
+  // });
+  // const myContract5 = await deploy("SimpleBadge", {
+  //   from: deployer,
+  //   args: ["0x042e5e696b8e6c15d4cc58c983437977f54d6e44645d7eef34e74716021dddd4"],
+  //   log: true,
+  // });
 
   /*
   await SimpleBadge.mintBadge("0x807a1752402D21400D555e1CD7f175566088b955", 1);
@@ -48,11 +51,12 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   await SimpleBadge.levelBadge(4, 3);
   */
 
-  const SVGBadge = await deploy("SVGBadge", {
-    from: deployer,
-    args: [myContract.address, myContract2.address, myContract3.address,myContract4.address,myContract5.address,],
-    log: true,
-  });
+      // CURRENTLY NOT DEPLOYING TO TEST MERKLE BADGE
+  // const SVGBadge = await deploy("SVGBadge", {
+  //   from: deployer,
+  //   args: [myContract.address, myContract2.address, myContract3.address,myContract4.address,myContract5.address,],
+  //   log: true,
+  // });
 
   /*
     To take ownership of yourContract using the ownable library uncomment next line and add the 
