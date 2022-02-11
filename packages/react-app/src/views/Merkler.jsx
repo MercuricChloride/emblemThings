@@ -31,26 +31,23 @@ function Merkler({
   const client = createClient({
     url: APIURL,
   })
-  const [mappedData, setMappedData] = useState();
-  const [root, setRoot] = useState();
-  const [proof, setProof] = useState([]);
-  //Updates the list to display addresses to provide visual aid
-  //Also uses fetched data to generate a merkle proof
+  const [fetchedResults, setFetchedResults] = useState();
+
   useEffect(async () => {
-    const data = await client.query(query).toPromise();
-    const results = await data.data.participants.map(item => item.wallet);
-    setMappedData(results);
-    await results.push('0x807a1752402D21400D555e1CD7f175566088b955');
-    const leaves = results.map(x => keccak256(x));
-    console.log(await leaves);
-    const tree = new MerkleTree(leaves, keccak256, { sortPairs: true });
-    setRoot(tree.getHexRoot());
-    console.log('root: ', root);
-    const leaf = keccak256(address);
-    setProof(tree.getHexProof(leaf));
-    console.log('proof: ', proof);
-    console.log('What about this dude?', tree.verify(tree.getHexProof(keccak256('0x000f9987b3352802ad6934402da1a215b1ecef13')), keccak256('0x000f9987b3352802ad6934402da1a215b1ecef13'), root)) // true;
+    setFetchedResults(await fetchData());
   }, []);
+
+  const fetchData = async () => {
+    const data = await client.query(query).toPromise();
+    const realWallets = await data.data.participants.map(item => item.wallet);
+    const wallets = [...realWallets, '0x807a1752402D21400D555e1CD7f175566088b955'];
+    const leaves = wallets.map(x => keccak256(x));
+    const tree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+    const root = tree.getHexRoot();
+    const leaf = keccak256(address);
+    const proof = tree.getHexProof(leaf);
+    return [root, leaf, proof, wallets];
+  }
 
   return (
     <Row justify="center">
@@ -58,10 +55,9 @@ function Merkler({
         onFinish={async () => {
         }}
       >
-
       </Form>
       <List
-        dataSource={mappedData}
+        dataSource={fetchedResults ? fetchedResults[3] : ["loading"]}
         header={<h1>Current List of "Winners"</h1>}
         renderItem={item => {
           return (<List.Item>Wallet: {item}</List.Item>)
@@ -69,23 +65,13 @@ function Merkler({
         }
       />
       <Divider />
-      <h1>Current Merkle root to submit: {root}</h1>
+
       <Button onClick={async () => {
-        const data = await client.query(query).toPromise();
-        const results = await data.data.participants.map(item => item.wallet);
-        setMappedData(results);
-        await results.push('0x807a1752402D21400D555e1CD7f175566088b955');
-        console.log(results);
-        const leaves = results.map(x => keccak256(x));
-        console.log(await leaves);
-        const tree = new MerkleTree(leaves, keccak256, { sortPairs: true });
-        setRoot(tree.getHexRoot());
-        console.log('root: ', root);
-        const leaf = keccak256(address);
-        setProof(tree.getHexProof(leaf));
-        console.log('proof: ', proof);
-        console.log('What about this dude?', tree.verify(tree.getHexProof(keccak256('0x000f9987b3352802ad6934402da1a215b1ecef13')), keccak256('0x000f9987b3352802ad6934402da1a215b1ecef13'), root)) // true;
-        await tx(writeContracts.SimpleBadge.merkleMint(proof, address));
+        await tx(writeContracts.SimpleBadge.updateMerkleRoot(fetchedResults[0]));
+      }}>Update Merkle Root</Button>
+
+      <Button onClick={async () => {
+        await tx(writeContracts.SimpleBadge.merkleMint(fetchedResults[2], address));
       }}>Click to merkle mint</Button>
     </Row>
   );
